@@ -15,6 +15,29 @@ const AudioInput = () => {
     tf.setBackend('webgl');
   }, []);
 
+  const sendToAPI = async (tensorData: Float32Array) => {
+    try {
+      const response = await fetch('/api/audio', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          audioData: Array.from(tensorData)
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send audio data');
+      }
+
+      const result = await response.json();
+      console.log('API response:', result);
+    } catch (error) {
+      console.error('Error sending to API:', error);
+    }
+  };
+
   const processAudioData = () => {
     if (!analyzerRef.current || !dataArrayRef.current) return;
 
@@ -25,6 +48,9 @@ const AudioInput = () => {
     
     // Example processing: Calculate RMS (Root Mean Square) amplitude
     const rms = tf.sqrt(tf.mean(tf.square(tensor)));
+    
+    // Send processed data to API
+    sendToAPI(dataArrayRef.current);
     
     // Clean up tensor to prevent memory leaks
     tensor.dispose();
