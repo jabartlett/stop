@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+'use client';
+
+import { useState, useEffect } from 'react';
 
 const AudioInput = () => {
-  const [audioStream, setAudioStream] = useState(null);
+  const [audioStream, setAudioStream] = useState<MediaStream | null>(null);
   const [isRecording, setIsRecording] = useState(false);
-  const [audioContext, setAudioContext] = useState(null);
+  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
 
   const startRecording = async () => {
     try {
@@ -13,8 +15,6 @@ const AudioInput = () => {
       const analyzer = context.createAnalyser();
       
       source.connect(analyzer);
-      // Comment out the following line if you don't want to hear the audio
-      // analyzer.connect(context.destination);
       
       setAudioStream(stream);
       setAudioContext(context);
@@ -43,14 +43,14 @@ const AudioInput = () => {
   }, []);
 
   return (
-    <div className="audio-input">
+    <div>
       <button 
         onClick={isRecording ? stopRecording : startRecording}
-        className={`button ${isRecording ? 'recording' : ''}`}
+        className={`${isRecording ? 'bg-red-500' : 'bg-blue-500'} text-white px-4 py-2 rounded`}
       >
         {isRecording ? 'Stop Recording' : 'Start Recording'}
       </button>
-      {isRecording && <div className="recording-indicator">Recording...</div>}
+      {isRecording && <div className="text-red-500 font-bold mt-2">Recording...</div>}
     </div>
   );
 };

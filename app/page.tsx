@@ -1,4 +1,5 @@
 import Image from "next/image";
+import AudioInput from '@/components/AudioInput';
 
 export default function Home() {
   return (
@@ -48,6 +49,7 @@ export default function Home() {
             Read our docs
           </a>
         </div>
+        <AudioInput />
       </main>
       <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
         <a
